@@ -49,9 +49,21 @@ class ItemsVC: UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let item = itemStore.allItems[indexPath.row]
-            itemStore.removeItem(item)
             
-            tableView.deleteRows(at: [indexPath], with: .automatic)
+            let title = "Delete \(item.name)?"
+            let message = "Are you sure that you want to delete this item?"
+            let ac = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
+            
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            ac.addAction(cancelAction)
+            
+            let deleteAction = UIAlertAction(title: "Get Rid of It", style: .destructive) { (action) in
+                self.itemStore.removeItem(item)
+                tableView.deleteRows(at: [indexPath], with: .automatic)
+            }
+            ac.addAction(deleteAction)
+            
+            present(ac, animated: true, completion: nil)
         }
     }
     
