@@ -9,6 +9,7 @@
 import Foundation
 
 class Item: NSObject {
+    
     var name: String
     var valueInDollars: Int
     var serialNumber: String?
@@ -25,14 +26,14 @@ class Item: NSObject {
     
     convenience init(random: Bool = false) {
         if random {
-            let adj = ["Old", "New", "Shiny"]
-            let noun = ["Dresser", "Turntables", "Trophy"]
+            let adj = ["Old", "New", "Favorite"]
+            let noun = ["Dresser", "Turntables", "Purse", "Watch", "Earrings", "Suit"]
             
             var idx = arc4random_uniform(UInt32(adj.count))
             let randomAdj = adj[Int(idx)]
             
             idx = arc4random_uniform(UInt32(noun.count))
-            let randomNoun = adj[Int(idx)]
+            let randomNoun = noun[Int(idx)]
             
             
             let randomName = "\(randomAdj) \(randomNoun)"

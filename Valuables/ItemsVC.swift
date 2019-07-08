@@ -9,6 +9,7 @@
 import UIKit
 
 class ItemsVC: UITableViewController {
+    
     var itemStore: ItemStore!
     
     @IBAction func addNewItem (_ sender: UIButton) {
@@ -17,7 +18,6 @@ class ItemsVC: UITableViewController {
             let indexPath = IndexPath(row: index, section: 0)
             tableView.insertRows(at: [indexPath], with: .automatic)
         }
-
     }
     
     @IBAction func toggleEditingMode (_ sender: UIButton) {
@@ -37,12 +37,17 @@ class ItemsVC: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "UITableViewCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ItemCell", for: indexPath) as! ItemCell
         
         let item = itemStore.allItems[indexPath.row]
         
-        cell.textLabel?.text = item.name
-        cell.detailTextLabel?.text = "$\(item.valueInDollars)"
+        cell.nameLabel.text = item.name
+        cell.serialNumber.text = item.serialNumber
+        cell.valueLabel.text = "$\(item.valueInDollars)"
+        if item.valueInDollars >= 500 {
+            cell.valueLabel.textColor = .red
+        }
+
         return cell
     }
     
@@ -69,6 +74,19 @@ class ItemsVC: UITableViewController {
     
     override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         itemStore.moveItem(from: sourceIndexPath.row, to: destinationIndexPath.row)
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        let statusBarHeight = UIApplication.shared.statusBarFrame.height
+        
+        let insets = UIEdgeInsets(top: statusBarHeight, left: 0, bottom: 0, right: 0)
+        tableView.contentInset = insets
+        tableView.scrollIndicatorInsets = insets
+        
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 65
     }
 }
 
