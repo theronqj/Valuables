@@ -11,7 +11,31 @@ import UIKit
 class ItemsVC: UITableViewController {
     
     var itemStore: ItemStore!
+    var imageStore: ImageStore!
+    let reuseID: String = "UITableViewCell"
     
+    // MARK: - Initializers
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        
+        navigationItem.leftBarButtonItem = editButtonItem
+    }
+    
+    // MARK: - View lifecycle
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        tableView.reloadData()
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 65
+    }
+    
+    // MARK: - Actions
     @IBAction func addNewItem (_ sender: UIBarButtonItem) {
         let newItem = itemStore.createItems()
         if let index = itemStore.allItems.index(of: newItem) {
@@ -20,8 +44,21 @@ class ItemsVC: UITableViewController {
         }
     }
     
-    let reuseID: String = "UITableViewCell"
-    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        switch segue.identifier {
+        case "showItem"?:
+            if let row = tableView.indexPathForSelectedRow?.row {
+                let item = itemStore.allItems[row]
+                let detailVC = segue.destination as! DetailViewController
+                detailVC.item = item
+                detailVC.imageStore = imageStore
+            }
+        default:
+            preconditionFailure("Unexpected segue identifier.")
+        }
+    }
+
+    // MARK: - UITableViewDataSource methods
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
                return itemStore.allItems.count
     }
@@ -54,6 +91,7 @@ class ItemsVC: UITableViewController {
             
             let deleteAction = UIAlertAction(title: "Get Rid of It", style: .destructive) { (action) in
                 self.itemStore.removeItem(item)
+                self.imageStore.deleteImage(forKey: item.itemKey)
                 tableView.deleteRows(at: [indexPath], with: .automatic)
             }
             ac.addAction(deleteAction)
@@ -64,38 +102,6 @@ class ItemsVC: UITableViewController {
     
     override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         itemStore.moveItem(from: sourceIndexPath.row, to: destinationIndexPath.row)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        tableView.reloadData()
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 65
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        switch segue.identifier {
-        case "showItem"?:
-            if let row = tableView.indexPathForSelectedRow?.row {
-                let item = itemStore.allItems[row]
-                let detailVC = segue.destination as! DetailViewController
-                detailVC.item = item
-            }
-        default:
-            preconditionFailure("Unexpected segue identifier.")
-        }
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        
-        navigationItem.leftBarButtonItem = editButtonItem
     }
 }
 
