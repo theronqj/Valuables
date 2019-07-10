@@ -8,7 +8,18 @@
 
 import Foundation
 
-class Item: NSObject {
+class Item: NSObject, NSCoding {
+    required init?(coder aDecoder: NSCoder) {
+        name = aDecoder.decodeObject(forKey: "name") as! String
+        date = aDecoder.decodeObject(forKey: "dateCreated") as! Date
+        itemKey = aDecoder.decodeObject(forKey: "itemKey") as! String
+        serialNumber = aDecoder.decodeObject(forKey: "serialNumber") as? String
+        valueInDollars = aDecoder.decodeInteger(forKey: "valueInDollars")
+        
+        super.init()
+    }
+    
+
     
     var name: String
     var valueInDollars: Int
@@ -46,5 +57,13 @@ class Item: NSObject {
         } else {
             self.init(name: "", dollarValue: -1, serialNumber: nil, itemKey: UUID().uuidString)
         }
+    }
+    
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(name, forKey: "name")
+        aCoder.encode(valueInDollars, forKey: "valueInDollars")
+        aCoder.encode(serialNumber, forKey: "serialNumber")
+        aCoder.encode(date, forKey: "dateCreated")
+        aCoder.encode(itemKey, forKey: "itemKey")
     }
 }
