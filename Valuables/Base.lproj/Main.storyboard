@@ -78,7 +78,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Goo-q8-S4P" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="784.79999999999995" y="138.98050974512745"/>
+            <point key="canvasLocation" x="706" y="139"/>
         </scene>
         <!--Detail View Controller-->
         <scene sceneID="LPG-8N-FTa">
@@ -211,7 +211,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1517.5999999999999" y="138.98050974512745"/>
+            <point key="canvasLocation" x="1593" y="139"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Qj3-vp-4Hk">

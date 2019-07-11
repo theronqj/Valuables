@@ -10,6 +10,12 @@ import Foundation
 
 class ItemStore {
     
+    init() {
+        if let archivedItems = NSKeyedUnarchiver.unarchiveObject(withFile: itemArchiveURL.path) as? [Item] {
+            allItems = archivedItems
+        }
+    }
+    
     var allItems = [Item]()
     let itemArchiveURL: URL = {
         let documentDirectories = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
@@ -37,6 +43,11 @@ class ItemStore {
         let movedItem = allItems[fromIndex]
         allItems.remove(at: fromIndex)
         allItems.insert(movedItem, at: toIndex)
+    }
+    
+    func saveChanges() -> Bool {
+        print ("Saving items to: \(itemArchiveURL.path)")
+        return NSKeyedArchiver.archiveRootObject(allItems, toFile: itemArchiveURL.path)
     }
 }
 
