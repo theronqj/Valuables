@@ -1,3 +1,3 @@
 # Valuables
 
-(Working: App to keep track of valuables w/ camera/photo usage and persistence)
+(Working: Keep track of list of valuables, include camera/photo usage and persistence)
